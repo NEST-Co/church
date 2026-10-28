@@ -1,9 +1,8 @@
 ---
 import Church from '../layouts/Church.astro';
 ---
-<Church title="Search" description="Search sermons, blog posts, events and pages." index={false}>
-  <div class="wrap">
-    <h1>Search the site</h1>
+<Church title="Search" description="Search sermons, blog posts, events and pages." index={false} eyebrow="Find something" heading="Search the site" lead="Sermons, blog posts, events and pages.">
+  <div class="wrap body narrow">
     <form id="search-form" role="search" class="search-row" action="/search" method="get">
       <div>
         <label for="q">Search for</label>
@@ -58,7 +57,7 @@ import Church from '../layouts/Church.astro';
       for (const h of hits) {
         const li = document.createElement('li');
         const h2 = document.createElement('h2');
-        h2.style.cssText = 'font-size:1.25rem;margin:0';
+        h2.style.cssText = 'font-size:1.3rem;margin:0';
         const a = document.createElement('a');
         a.href = h.url;
         a.textContent = h.meta?.title || h.url;

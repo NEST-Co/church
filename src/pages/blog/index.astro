@@ -1,20 +1,20 @@
 ---
 import { getCollection } from 'astro:content';
 import Church from '../../layouts/Church.astro';
+import CoverArt from '../../components/CoverArt.astro';
 import { fmt } from '../../data/church';
 const posts = (await getCollection('blog')).sort((a, b) => +b.data.date - +a.data.date);
 const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 ---
-<Church title="Blog" section="Blog">
-  <div class="wrap">
-    <h1>Blog</h1>
-    <p>News and notes from around the church. Looking for something specific? <a href="/search">Search the site</a>.</p>
-    <h2 style="font-size:1.1rem">Topics</h2>
-    <ul class="tags">{tags.map((t) => <li><a class="tag" href={`/blog/tag/${t}`}>{t}</a></li>)}</ul>
-    <ul class="list">{posts.map((p) => (
-      <li><h2 style="font-size:1.35rem;margin:0"><a href={`/blog/${p.id}`}>{p.data.title}</a></h2>
+<Church title="Blog" section="Blog" eyebrow="News and notes" heading="Blog" lead="Stories from around the church. Looking for something specific? Search the site.">
+  <div class="wrap body">
+    <h2 class="visually-hidden">Topics</h2>
+    <ul class="tags center" style="margin-bottom:2.5rem">{tags.map((t) => <li><a class="tag" href={`/blog/tag/${t}`}>{t}</a></li>)}</ul>
+    <ul class="grid3">{posts.map((p) => (
+      <li><article class="card"><CoverArt id={p.id} /><div class="txt">
         <p class="meta"><time datetime={p.data.date.toISOString().slice(0, 10)}>{fmt(p.data.date)}</time> · {p.data.author}</p>
-        <p>{p.data.summary}</p></li>
+        <h2><a href={`/blog/${p.id}`}>{p.data.title}</a></h2><p>{p.data.summary}</p></div></article></li>
     ))}</ul>
+    <p style="text-align:center;margin-top:2rem"><a href="/search">Search the site</a></p>
   </div>
 </Church>

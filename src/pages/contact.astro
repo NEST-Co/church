@@ -2,10 +2,14 @@
 import Church from '../layouts/Church.astro';
 import { site } from '../data/church';
 ---
-<Church title="Contact" section="Pages">
-  <div class="wrap prose">
-    <h1>Contact us</h1>
-    <p>{site.address}<br />Phone: {site.phone}<br />Email: <a href={`mailto:${site.email}`}>{site.email}</a><br />Office hours: {site.office}</p>
-    <p>This is a concept site, so there is no contact form.</p>
+<Church title="Contact" section="Pages" eyebrow="Say hello" heading="Contact us" lead="We will write back within two working days.">
+  <div class="wrap body">
+    <div class="info-grid">
+      <section class="info"><h2>Visit</h2><p>{site.address}</p></section>
+      <section class="info"><h2>Call</h2><p>{site.phone}</p></section>
+      <section class="info"><h2>Email</h2><p><a href={`mailto:${site.email}`}>{site.email}</a></p></section>
+      <section class="info"><h2>Office hours</h2><p>{site.office}</p></section>
+    </div>
+    <p class="narrow" style="text-align:center">This is a concept site, so there is no contact form.</p>
   </div>
 </Church>

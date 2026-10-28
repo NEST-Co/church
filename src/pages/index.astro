@@ -1,40 +1,85 @@
 ---
 import { getCollection } from 'astro:content';
 import Church from '../layouts/Church.astro';
-import { site, services, events, fmt, iso } from '../data/church';
+import CoverArt from '../components/CoverArt.astro';
+import { site, services, events, fmt, iso, dateParts } from '../data/church';
 const today = iso(new Date());
 const upcoming = events.filter((e) => e.date >= today).slice(0, 3);
 const shown = upcoming.length ? upcoming : events.slice(0, 3);
 const [sermon] = (await getCollection('sermons')).sort((a, b) => +b.data.date - +a.data.date);
 const posts = (await getCollection('blog')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
 ---
-<Church title="Welcome" description="Worship times, sermons, events and news for Cedar Grove Community Church." section="Pages">
-  <div class="hero"><div class="wrap">
-    <h1>You are welcome here</h1>
-    <p>Cedar Grove is a small, friendly church. Come as you are, sit where you like, and stay for coffee.</p>
-    <a class="btn" href="/visit">Plan your visit</a>
-  </div></div>
-  <div class="wrap">
-    <h2>When we meet</h2>
-    <ul class="times">{services.map((s) => <li><strong>{s.day}, {s.time}</strong>{s.what}</li>)}</ul>
-    <div class="two">
-      <section>
-        <h2>Latest sermon</h2>
-        <h3><a href={`/sermons/${sermon.id}`}>{sermon.data.title}</a></h3>
+<Church home title="Welcome" description="Worship times, sermons, events and news for Cedar Grove Community Church." section="Pages">
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Cedar Grove Community Church</p>
+        <h1 id="hero-h">You are <em>welcome</em> here.</h1>
+        <p class="sub">A small, friendly church. Come as you are, sit where you like, and stay for coffee.</p>
+        <div class="btns"><a class="btn" href="/visit">Plan your visit</a><a class="btn alt" href={`/sermons/${sermon.id}`}>Hear the latest sermon</a></div>
+      </div>
+      <div class="arch">
+        <div class="frame"><img src="/img/church-hero.svg" alt="Cedar Grove church at dusk, its windows glowing, with a lit path to the front door" width="640" height="800" fetchpriority="high" /></div>
+        <div class="tag-card"><strong>Sundays, 9:00 and 10:45</strong>{site.address}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="times-wrap" aria-labelledby="when-h">
+    <div class="wrap">
+      <div class="sec-title"><h2 id="when-h">When we meet</h2><p>Pick the one that suits your morning.</p></div>
+      <ul class="times">{services.map((s) => <li><span class="day">{s.day}</span><span class="time">{s.time}</span><span class="what">{s.what}</span></li>)}</ul>
+    </div>
+  </section>
+
+  <section class="newhere" aria-labelledby="new-h">
+    <div class="wrap">
+      <img src="/img/potluck.svg" alt="A long table set with shared dishes, candles and neighbors gathered behind it" width="800" height="560" loading="lazy" />
+      <div>
+        <p class="eyebrow">New here?</p>
+        <h2 id="new-h">Nobody is a stranger for long.</h2>
+        <p>We know walking into a new church can feel like a lot. Here is what to expect.</p>
+        <ul class="checks">
+          <li>Wear whatever is comfortable. You will see jeans and you will see ties.</li>
+          <li>The front entrance has no steps, and an accessible restroom is off the main hall.</li>
+          <li>Children are welcome in the service. A nursery and Sunday school open during the 10:45 talk.</li>
+        </ul>
+        <a class="btn" href="/visit">What to expect</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature" aria-labelledby="sermon-h">
+    <div class="wrap">
+      <div class="art"><CoverArt id={sermon.id} ratio="4 / 3" /></div>
+      <div>
+        <p class="eyebrow">Latest sermon · {sermon.data.series}</p>
+        <h2 id="sermon-h"><a href={`/sermons/${sermon.id}`}>{sermon.data.title}</a></h2>
         <p class="meta">{fmt(sermon.data.date)} · {sermon.data.speaker} · {sermon.data.scripture}</p>
         <p>{sermon.data.summary}</p>
-        <p><a href="/sermons">All sermons</a></p>
-        <h2>Coming up</h2>
-        <ul class="list">{shown.map((e) => <li><h3>{e.title}</h3><p class="meta"><time datetime={e.date}>{fmt(e.date)}</time> · {e.time} · {e.place}</p></li>)}</ul>
-        <p><a href="/events">All events</a></p>
-      </section>
-      <section>
-        <h2>From the blog</h2>
-        <ul class="list">{posts.map((p) => (
-          <li><h3><a href={`/blog/${p.id}`}>{p.data.title}</a></h3><p class="meta">{fmt(p.data.date)}</p><p>{p.data.summary}</p></li>
-        ))}</ul>
-        <p><a href="/blog">All posts</a> · <a href="/search">Search the site</a></p>
-      </section>
+        <a class="btn gold" href="/sermons">Browse all sermons</a>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <section class="section" aria-labelledby="ev-h">
+    <div class="wrap">
+      <div class="sec-title"><h2 id="ev-h">Coming up</h2></div>
+      <ul class="ev-list narrow" style="max-width:860px">{shown.map((e) => { const p = dateParts(e.date); return (
+        <li><div class="dot" aria-hidden="true" data-pagefind-ignore><span class="m">{p.m}</span><span class="d">{p.d}</span></div>
+          <div><h3>{e.title}</h3><p class="meta"><time datetime={e.date}>{fmt(e.date, { weekday: 'long', month: 'long', day: 'numeric' })}</time> · {e.time} · {e.place}</p></div></li>
+      ); })}</ul>
+      <p style="text-align:center;margin-top:1.75rem"><a class="btn alt" href="/events">All events</a></p>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--surface)" aria-labelledby="blog-h">
+    <div class="wrap">
+      <div class="sec-title"><h2 id="blog-h">From the blog</h2><p>News and notes from around the church.</p></div>
+      <ul class="grid3">{posts.map((p) => (
+        <li><article class="card"><CoverArt id={p.id} /><div class="txt"><p class="meta">{fmt(p.data.date)}</p><h3><a href={`/blog/${p.id}`}>{p.data.title}</a></h3><p>{p.data.summary}</p></div></article></li>
+      ))}</ul>
+      <p style="text-align:center;margin-top:2rem"><a href="/blog">All posts</a> · <a href="/search">Search the site</a></p>
+    </div>
+  </section>
 </Church>

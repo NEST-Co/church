@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Church from '../../../layouts/Church.astro';
+import CoverArt from '../../../components/CoverArt.astro';
 import { fmt } from '../../../data/church';
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -12,14 +13,13 @@ export async function getStaticPaths() {
 }
 const { tag, posts } = Astro.props;
 ---
-<Church title={`Posts about ${tag}`} section="Blog" index={false}>
-  <div class="wrap">
-    <p><a href="/blog">&larr; All posts</a></p>
-    <h1>Posts about {tag}</h1>
-    <ul class="list">{posts.map((p) => (
-      <li><h2 style="font-size:1.35rem;margin:0"><a href={`/blog/${p.id}`}>{p.data.title}</a></h2>
+<Church title={`Posts about ${tag}`} section="Blog" index={false} eyebrow="Topic" heading={`Posts about ${tag}`}>
+  <div class="wrap body">
+    <p style="text-align:center"><a href="/blog">&larr; All posts</a></p>
+    <ul class="grid3">{posts.map((p) => (
+      <li><article class="card"><CoverArt id={p.id} /><div class="txt">
         <p class="meta"><time datetime={p.data.date.toISOString().slice(0, 10)}>{fmt(p.data.date)}</time></p>
-        <p>{p.data.summary}</p></li>
+        <h2><a href={`/blog/${p.id}`}>{p.data.title}</a></h2><p>{p.data.summary}</p></div></article></li>
     ))}</ul>
   </div>
 </Church>

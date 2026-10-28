@@ -1,24 +1,24 @@
 ---
 import Church from '../layouts/Church.astro';
 ---
-<Church title="Accessibility statement" description="How this site was tested for accessibility, with the results." section="Pages">
-  <div class="wrap prose">
-    <h1>Accessibility statement</h1>
+<Church title="Accessibility statement" description="How this site was tested for accessibility, with the results." section="Pages" eyebrow="Everyone is welcome" heading="Accessibility statement" lead="How this site was tested, with the results.">
+  <div class="wrap body prose" style="max-width:860px">
     <p>This site aims to meet WCAG 2.2 level AA. It is a concept project and the church is fictional, but the tests below were run on this site.</p>
 
     <h2>Test results, October 28, 2026</h2>
     <table>
-      <caption>Automated and scripted checks</caption>
+      <caption>Automated and scripted checks, run after the October 28 redesign</caption>
       <thead><tr><th scope="col">Check</th><th scope="col">Result</th></tr></thead>
       <tbody>
-        <tr><th scope="row">axe-core (WCAG 2.0 and 2.1 A and AA, plus best practices)</th><td>0 violations on 15 pages, at phone and desktop sizes, including the search page with results showing</td></tr>
-        <tr><th scope="row">Lighthouse accessibility (13 pages, phone profile)</th><td>100 on every page</td></tr>
-        <tr><th scope="row">Lighthouse performance</th><td>100 on every page; pages weigh about 4 KB</td></tr>
-        <tr><th scope="row">Lighthouse best practices</th><td>100 on every page</td></tr>
+        <tr><th scope="row">axe-core (WCAG 2.0 and 2.1 A and AA, plus best practices)</th><td>0 violations on 14 pages, at phone and desktop sizes, plus the search page with results and with no results</td></tr>
+        <tr><th scope="row">Lighthouse accessibility (5 pages: home, visit, sermons, blog, events, phone profile)</th><td>100 on every page tested</td></tr>
+        <tr><th scope="row">Lighthouse performance</th><td>100 on every page tested</td></tr>
+        <tr><th scope="row">Lighthouse best practices</th><td>100 on every page tested</td></tr>
         <tr><th scope="row">Keyboard</th><td>Skip link is the first stop and every stop shows a visible focus ring</td></tr>
         <tr><th scope="row">Reflow at 320 and 640 pixels wide</th><td>No horizontal scrolling</td></tr>
         <tr><th scope="row">Text spacing</th><td>No clipped text</td></tr>
-        <tr><th scope="row">Structure</th><td>One h1 per page, no skipped heading levels, every page has a title and description</td></tr>
+        <tr><th scope="row">Structure</th><td>One h1 per page, no skipped heading levels, every page has a title and description, every image has an alt attribute (empty for decoration)</td></tr>
+        <tr><th scope="row">Page weight</th><td>About 32 KB or less for any page, including images. The search page loads the search engine when you search, about 190 KB</td></tr>
       </tbody>
     </table>
 
@@ -27,8 +27,10 @@ import Church from '../layouts/Church.astro';
 
     <h2>What was fixed during testing</h2>
     <ul>
-      <li>Blog topic links ran together with no spaces, which made search results spill off narrow screens. Topics are now a list of separate links.</li>
-      <li>Topic links are now at least 44 pixels tall.</li>
+      <li>The month labels in the date circles were too faint against the dark red. They are now lighter.</li>
+      <li>A decorative glow behind the home page headline made the page scroll sideways at 320 pixels wide. It is now clipped.</li>
+      <li>Date circles are excluded from search results, so results do not show text like "Nov5".</li>
+      <li>Cover pictures for sermons and posts are decorative and hidden from screen readers.</li>
     </ul>
 
     <h2>Not yet tested</h2>

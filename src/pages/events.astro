@@ -1,14 +1,14 @@
 ---
 import Church from '../layouts/Church.astro';
-import { events, fmt } from '../data/church';
+import { events, fmt, dateParts } from '../data/church';
 ---
-<Church title="Events" section="Events">
-  <div class="wrap">
-    <h1>Events</h1>
-    <ul class="list">{events.map((e) => (
-      <li><h2 style="font-size:1.25rem;margin:0">{e.title}</h2>
-        <p class="meta"><time datetime={e.date}>{fmt(e.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</time> · {e.time} · {e.place}</p>
-        <p>{e.note}</p></li>
-    ))}</ul>
+<Church title="Events" section="Events" eyebrow="Calendar" heading="Events" lead="Come to one, or come to all of them.">
+  <div class="wrap body">
+    <ul class="ev-list narrow" style="max-width:860px">{events.map((e) => { const p = dateParts(e.date); return (
+      <li><div class="dot" aria-hidden="true" data-pagefind-ignore><span class="m">{p.m}</span><span class="d">{p.d}</span></div>
+        <div><h2>{e.title}</h2>
+          <p class="meta"><time datetime={e.date}>{fmt(e.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</time> · {e.time} · {e.place}</p>
+          <p>{e.note}</p></div></li>
+    ); })}</ul>
   </div>
 </Church>

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Church from '../../layouts/Church.astro';
+import CoverArt from '../../components/CoverArt.astro';
 import { fmt } from '../../data/church';
 export async function getStaticPaths() {
   return (await getCollection('sermons')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
@@ -9,11 +10,14 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const d = entry.data;
 ---
-<Church title={d.title} description={d.summary} section="Sermons">
-  <div class="wrap prose">
-    <p><a href="/sermons">&larr; All sermons</a></p>
-    <h1>{d.title}</h1>
-    <p class="meta"><time datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time> · {d.speaker} · {d.scripture} · Series: {d.series}</p>
-    <Content />
+<Church title={d.title} description={d.summary} section="Sermons" eyebrow={`Series: ${d.series}`} heading={d.title} lead={d.summary}>
+  <div class="wrap body">
+    <div class="cover-hero"><CoverArt id={entry.id} ratio="16 / 7" /></div>
+    <div class="narrow" style="margin-bottom:1.5rem">
+      <p style="margin:0"><a class="crumb" href="/sermons">&larr; All sermons</a><br /><span class="meta"><time datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time> · {d.speaker} · {d.scripture}</span></p>
+    </div>
+    <div class="prose drop">
+      <Content />
+    </div>
   </div>
 </Church>

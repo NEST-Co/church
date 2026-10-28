@@ -31,3 +31,7 @@ export const events = [
 export const fmt = (d: Date | string, opts: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }) =>
   (typeof d === 'string' ? new Date(d + 'T12:00:00') : d).toLocaleDateString('en-US', { timeZone: 'UTC', ...opts });
 export const iso = (d: Date) => d.toISOString().slice(0, 10);
+export const dateParts = (iso: string) => {
+  const d = new Date(iso + 'T12:00:00');
+  return { m: d.toLocaleDateString('en-US', { month: 'short' }), d: String(d.getDate()) };
+};

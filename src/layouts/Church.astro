@@ -2,18 +2,19 @@
 import Base from './Base.astro';
 import Logo from '../components/Logo.astro';
 import { site, nav } from '../data/church';
-interface Props { title: string; description?: string; section?: string; index?: boolean }
-const { title, description = `${title}: ${site.name}, a fictional church.`, section = 'Pages', index = true } = Astro.props;
+import '../styles/church.css';
+interface Props { title: string; description?: string; section?: string; index?: boolean; heading?: string; lead?: string; eyebrow?: string; home?: boolean }
+const { title, description = `${title}: ${site.name}, a fictional church.`, section = 'Pages', index = true, heading, lead, eyebrow, home = false } = Astro.props;
 const path = Astro.url.pathname;
 ---
 <Base title={title} description={description} siteName={site.name}>
   <div slot="header" class="site-head">
     <div class="wrap bar">
-      <a class="brand" href="/"><Logo /><span>{site.name}</span></a>
+      <a class="brand" href="/"><Logo /><span class="brand-text"><span class="brand-name">{site.short}</span><span class="brand-sub">Community Church</span></span></a>
       <nav aria-label="Main">
         <ul>
           {nav.map((n) => (
-            <li><a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a></li>
+            <li><a class={n.href === '/give' ? 'give' : undefined} href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a></li>
           ))}
         </ul>
       </nav>
@@ -21,52 +22,25 @@ const path = Astro.url.pathname;
   </div>
   <div data-pagefind-body={index ? '' : undefined} data-pagefind-ignore={index ? undefined : 'all'}>
     {index && <meta data-pagefind-filter="section[content]" content={section} />}
+    {!home && heading && (
+      <header class="page-head">
+        <div class="wrap">
+          {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+          <h1>{heading}</h1>
+          {lead && <p class="lead">{lead}</p>}
+          <svg class="orn" aria-hidden="true" width="120" height="14" viewBox="0 0 120 14"><path d="M0 7h46M74 7h46" stroke="currentColor" stroke-width="1.500"/><path d="M60 0l6 7-6 7-6-7z" fill="currentColor"/></svg>
+        </div>
+      </header>
+    )}
     <slot />
   </div>
   <div slot="footer" class="site-foot">
     <div class="wrap">
-      <p><strong>{site.name}</strong><br />{site.address}<br />{site.phone} · <a href={`mailto:${site.email}`}>{site.email}</a><br />Office: {site.office}</p>
-      <p><a href="/accessibility">Accessibility statement</a> · <a href="/search">Search the site</a></p>
+      <Logo />
+      <p class="foot-name">{site.name}</p>
+      <p class="foot-line">{site.address}<br />{site.phone} · <a href={`mailto:${site.email}`}>{site.email}</a><br />Office: {site.office}</p>
+      <ul class="foot-links">{nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}</ul>
+      <p class="legal"><a href="/accessibility">Accessibility statement</a></p>
     </div>
   </div>
 </Base>
-<style is:global>
-  :root { --brand:#7A2E3A; --display:Georgia,"Iowan Old Style","Times New Roman",serif; --surface:#F8F4F1; }
-  .site-head{border-bottom:4px solid var(--brand)}
-  .bar{display:flex;flex-wrap:wrap;gap:.5rem 2rem;align-items:center;justify-content:space-between;padding-block:1rem}
-  .brand{display:inline-flex;align-items:center;gap:.6rem;font:700 1.35rem var(--display);color:var(--brand);text-decoration:none}
-  nav ul{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;list-style:none;margin:0;padding:0}
-  nav a{display:inline-block;padding:.6rem .25rem;color:var(--ink);font-weight:600}
-  nav a[aria-current="page"]{color:var(--brand);text-decoration-thickness:3px}
-  main{padding-block:2rem 4rem}
-  .site-foot{background:var(--surface);border-top:1px solid var(--line);padding-block:2rem}
-  .hero{background:var(--surface);border-bottom:1px solid var(--line);padding-block:3rem}
-  .hero h1{font-size:clamp(2rem,5vw,3.2rem);margin:0 0 .5rem}
-  .hero p{font-size:1.25rem;margin:0 0 1rem}
-  .times{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));list-style:none;padding:0}
-  .times li{border-left:4px solid var(--brand);padding:.25rem 1rem}
-  .times strong{display:block;font-size:1.15rem}
-  .two{display:grid;gap:2.5rem;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-  .list{list-style:none;padding:0}
-  .list li{border-bottom:1px solid var(--line);padding:.9rem 0;max-width:none}
-  .list h3{margin:0 0 .15rem;font-size:1.2rem}
-  .meta{color:var(--muted);font-size:.95rem;margin:0}
-  .tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.1rem .7rem;font-size:.9rem;margin-right:.35rem;color:var(--ink);text-decoration:none}
-  a.tag:hover{border-color:var(--brand)}
-  .tags{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;padding:0}
-  .tags li{max-width:none}
-  .tag{display:inline-flex;align-items:center;min-height:44px;padding-inline:.9rem;margin:0}
-  #results p,#results h2{overflow-wrap:anywhere}
-  .prose{max-width:var(--measure)}
-  .prose h2{margin-top:2rem}
-  .prose ol,.prose ul{padding-left:1.4rem}
-  label{font-weight:700;display:block;margin-bottom:.25rem}
-  input[type=search],select{font:inherit;min-height:44px;padding:.4rem .7rem;border:2px solid var(--ink);border-radius:6px;background:var(--bg);color:var(--ink)}
-  input[type=search]{width:min(100%,28rem)}
-  .search-row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;margin-bottom:1rem}
-  mark{background:#FFE9A8;color:var(--ink);padding:0 .1em}
-  table{border-collapse:collapse;width:100%}
-  th,td{text-align:left;padding:.7rem;border-bottom:1px solid var(--line);vertical-align:top}
-  caption{text-align:left;font-weight:700;padding-bottom:.5rem}
-  @media print{.skip-link,.concept-note,nav{display:none}}
-</style>

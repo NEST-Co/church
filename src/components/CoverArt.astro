@@ -1,0 +1,95 @@
+---
+// Decorative cover art for sermons and posts. Pure SVG, no files to load.
+interface Props { id: string; motif?: string; ratio?: string }
+const { id, motif, ratio = '4 / 3' } = Astro.props;
+const byId: Record<string, string> = {
+  'a-table-for-everyone': 'table', 'the-open-gate': 'gate', 'welcome-the-stranger': 'path',
+  'bread-for-the-day': 'bread', 'forgive-us-as-we-forgive': 'rays', 'our-father': 'lantern',
+  'neighborhood-cleanup': 'leaves', 'autumn-reading': 'book', 'first-time-visiting': 'gate',
+  'youth-fall-retreat': 'path', 'pantry-needs': 'bread',
+};
+const slug = id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+const m = motif ?? byId[slug] ?? 'rays';
+const palettes = [
+  { a: '#2F3560', b: '#6A5486', l: '#F6E7C1', x: '#E7A94F', d: '#1B1E3D' },
+  { a: '#A4503A', b: '#DB9457', l: '#FFF1DA', x: '#F7D070', d: '#6E2E22' },
+  { a: '#3F5E50', b: '#8BAA84', l: '#F8F3E4', x: '#E9C56B', d: '#243A30' },
+  { a: '#7A2E3A', b: '#C86F68', l: '#FFEFE0', x: '#F4C874', d: '#45161F' },
+];
+let h = 0; for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+const p = palettes[h % palettes.length];
+const gid = `g${h}`;
+---
+<svg class="cover" style={`aspect-ratio:${ratio}`} viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color={p.a}/><stop offset="1" stop-color={p.b}/></linearGradient>
+    <radialGradient id={`${gid}w`} cx=".5" cy=".5" r=".5"><stop offset="0" stop-color={p.x} stop-opacity=".9"/><stop offset="1" stop-color={p.x} stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="400" height="300" fill={`url(#${gid})`}/>
+  {m === 'gate' && (<g>
+    <circle cx="200" cy="150" r="130" fill={`url(#${gid}w)`}/>
+    <path d="M130 300V150a70 70 0 0 1 140 0v150Z" fill={p.l}/>
+    <path d="M150 300V152a50 50 0 0 1 100 0v148Z" fill={p.x} opacity=".55"/>
+    <path d="M200 100v200M150 170h100" stroke={p.l} stroke-width="3"/>
+    <path d="M60 300V210a14 14 0 0 1 28 0v90M312 300V210a14 14 0 0 1 28 0v90" fill={p.d} opacity=".8"/>
+    <rect y="270" width="400" height="30" fill={p.d} opacity=".85"/>
+    <path d="M130 300L96 300L130 262ZM270 300L304 300L270 262Z" fill={p.d} opacity=".5"/>
+  </g>)}
+  {m === 'bread' && (<g>
+    <rect y="214" width="400" height="86" fill={p.d} opacity=".85"/>
+    <ellipse cx="200" cy="214" rx="190" ry="14" fill={p.d} opacity=".4"/>
+    <g fill={p.x}><ellipse cx="150" cy="190" rx="62" ry="38"/><ellipse cx="256" cy="198" rx="54" ry="32"/></g>
+    <g fill="#fff" opacity=".28"><ellipse cx="136" cy="174" rx="34" ry="12"/><ellipse cx="244" cy="184" rx="28" ry="9"/></g>
+    <g stroke={p.d} stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"><path d="M122 172q8 12 16 22M148 166q8 12 16 24M174 172q8 12 14 22M232 182q6 10 14 18M258 178q6 10 14 20"/></g>
+    <g stroke={p.l} stroke-width="3" fill="none" stroke-linecap="round"><path d="M60 120c10 30 14 60 8 96M340 100c-10 36-14 70-8 112"/></g>
+    <g fill={p.l}><ellipse cx="54" cy="130" rx="5" ry="11" transform="rotate(-25 54 130)"/><ellipse cx="68" cy="116" rx="5" ry="11" transform="rotate(20 68 116)"/><ellipse cx="346" cy="116" rx="5" ry="11" transform="rotate(25 346 116)"/><ellipse cx="332" cy="102" rx="5" ry="11" transform="rotate(-20 332 102)"/></g>
+  </g>)}
+  {m === 'table' && (<g>
+    <circle cx="200" cy="110" r="120" fill={`url(#${gid}w)`}/>
+    <path d="M40 300l24-110h272l24 110Z" fill={p.l}/>
+    <rect x="30" y="184" width="340" height="12" rx="4" fill={p.d}/>
+    <g fill={p.d} opacity=".25"><rect x="64" y="196" width="272" height="104"/></g>
+    <g fill="#fff"><ellipse cx="110" cy="176" rx="34" ry="8"/><ellipse cx="200" cy="176" rx="34" ry="8"/><ellipse cx="290" cy="176" rx="34" ry="8"/></g>
+    <g fill={p.x}><circle cx="110" cy="172" r="12"/><circle cx="200" cy="172" r="12"/><circle cx="290" cy="172" r="12"/></g>
+    <g><rect x="160" y="120" width="8" height="56" fill={p.l}/><rect x="238" y="120" width="8" height="56" fill={p.l}/><path d="M164 100c-6 8-6 14 0 18 6-4 6-10 0-18ZM242 100c-6 8-6 14 0 18 6-4 6-10 0-18Z" fill={p.x}/></g>
+  </g>)}
+  {m === 'rays' && (<g>
+    <g stroke={p.x} stroke-width="10" stroke-linecap="round" opacity=".55">{Array.from({ length: 11 }, (_, i) => { const a = (-170 + i * 16) * Math.PI / 180; return <path d={`M${200 + Math.cos(a) * 70} ${220 + Math.sin(a) * 70}L${200 + Math.cos(a) * 150} ${220 + Math.sin(a) * 150}`} />; })}</g>
+    <circle cx="200" cy="220" r="58" fill={p.x}/><circle cx="200" cy="220" r="44" fill={p.l} opacity=".7"/>
+    <path d="M0 230C90 196 150 240 220 222S340 200 400 226V300H0Z" fill={p.d} opacity=".9"/>
+    <path d="M0 262C110 236 210 276 400 250V300H0Z" fill={p.d}/>
+  </g>)}
+  {m === 'path' && (<g>
+    <circle cx="300" cy="80" r="26" fill={p.l} opacity=".9"/>
+    <path d="M0 190C80 160 160 190 260 170S360 160 400 170V300H0Z" fill={p.d} opacity=".7"/>
+    <path d="M0 230C100 210 200 240 400 200V300H0Z" fill={p.d} opacity=".9"/>
+    <path d="M150 300C170 270 240 270 232 240S190 214 264 190" fill="none" stroke={p.l} stroke-width="16" stroke-linecap="round" opacity=".85"/>
+    <g transform="translate(262 150)"><rect x="-14" y="10" width="28" height="30" fill={p.l}/><path d="M-18 12L0-6L18 12Z" fill={p.x}/><rect x="-3" y="-26" width="6" height="22" fill={p.l}/><path d="M0-34v10M-5-30h10" stroke={p.l} stroke-width="2.500"/><rect x="-4" y="22" width="8" height="18" fill={p.d}/></g>
+    <g fill={p.l} opacity=".9"><path d="M60 220l10-40 10 40ZM88 226l8-34 8 34Z" fill={p.d}/></g>
+  </g>)}
+  {m === 'lantern' && (<g>
+    <circle cx="200" cy="160" r="140" fill={`url(#${gid}w)`}/>
+    <path d="M200 0v50" stroke={p.l} stroke-width="3"/>
+    <path d="M176 60h48l8 14H168Z" fill={p.l}/>
+    <path d="M172 74h56l-6 120h-44Z" fill={p.x} opacity=".95"/>
+    <path d="M200 74v120M172 74l10 120M228 74l-10 120" stroke={p.d} stroke-width="3" opacity=".55"/>
+    <rect x="164" y="194" width="72" height="14" rx="3" fill={p.l}/>
+    <path d="M200 100c-12 18-12 36 0 56 12-20 12-38 0-56Z" fill="#fff" opacity=".85"/>
+    <g fill={p.l} opacity=".7"><circle cx="70" cy="60" r="2.500"/><circle cx="330" cy="90" r="2"/><circle cx="110" cy="230" r="2"/><circle cx="310" cy="240" r="2.500"/><circle cx="60" cy="150" r="1.800"/><circle cx="350" cy="170" r="1.800"/></g>
+  </g>)}
+  {m === 'leaves' && (<g>
+    <g>{[[70,70,-30,1,0],[160,120,25,1.2,1],[260,70,-10,.9,2],[330,150,40,1.3,0],[100,200,15,1.1,2],[220,210,-35,1,1],[40,140,10,.8,1],[300,250,20,1,2]].map(([x,y,r,s,k]) => (
+      <g transform={`translate(${x} ${y}) rotate(${r}) scale(${s})`}><path d="M0-30C22-18 24 12 0 32C-24 12-22-18 0-30Z" fill={[p.x, p.l, p.d][k as number]} opacity={k === 2 ? .55 : .95}/><path d="M0-26V34" stroke={p.a} stroke-width="2" opacity=".5"/></g>
+    ))}</g>
+  </g>)}
+  {m === 'book' && (<g>
+    <circle cx="200" cy="130" r="120" fill={`url(#${gid}w)`}/>
+    <path d="M200 120C160 96 110 100 70 118V232C110 214 160 212 200 236C240 212 290 214 330 232V118C290 100 240 96 200 120Z" fill={p.l}/>
+    <path d="M200 120V236" stroke={p.d} stroke-width="3" opacity=".5"/>
+    <g stroke={p.d} stroke-width="3" opacity=".35" stroke-linecap="round"><path d="M92 140q50-10 90 6M92 160q50-10 90 6M92 180q50-10 90 6M218 146q40-16 90-6M218 166q40-16 90-6M218 186q40-16 90-6"/></g>
+    <path d="M70 232C110 214 160 212 200 236C240 212 290 214 330 232V246C290 230 240 232 200 252C160 232 110 230 70 246Z" fill={p.d} opacity=".6"/>
+  </g>)}
+</svg>
+<style>
+  .cover{display:block;width:100%;height:auto;border-radius:inherit}
+</style>

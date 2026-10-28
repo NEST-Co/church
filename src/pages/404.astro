@@ -1,9 +1,6 @@
 ---
 import Church from '../layouts/Church.astro';
 ---
-<Church title="Page not found" index={false}>
-  <div class="wrap prose">
-    <h1>We could not find that page</h1>
-    <p>Try the <a href="/">home page</a> or <a href="/search">search the site</a>.</p>
-  </div>
+<Church title="Page not found" index={false} heading="We could not find that page" lead="It may have moved.">
+  <div class="wrap body"><p class="narrow" style="text-align:center">Try the <a href="/">home page</a> or <a href="/search">search the site</a>.</p></div>
 </Church>
