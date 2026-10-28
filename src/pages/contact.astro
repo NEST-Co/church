@@ -1,0 +1,11 @@
+---
+import Church from '../layouts/Church.astro';
+import { site } from '../data/church';
+---
+<Church title="Contact" section="Pages">
+  <div class="wrap prose">
+    <h1>Contact us</h1>
+    <p>{site.address}<br />Phone: {site.phone}<br />Email: <a href={`mailto:${site.email}`}>{site.email}</a><br />Office hours: {site.office}</p>
+    <p>This is a concept site, so there is no contact form.</p>
+  </div>
+</Church>

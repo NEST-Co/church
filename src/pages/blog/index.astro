@@ -1,0 +1,20 @@
+---
+import { getCollection } from 'astro:content';
+import Church from '../../layouts/Church.astro';
+import { fmt } from '../../data/church';
+const posts = (await getCollection('blog')).sort((a, b) => +b.data.date - +a.data.date);
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+<Church title="Blog" section="Blog">
+  <div class="wrap">
+    <h1>Blog</h1>
+    <p>News and notes from around the church. Looking for something specific? <a href="/search">Search the site</a>.</p>
+    <h2 style="font-size:1.1rem">Topics</h2>
+    <ul class="tags">{tags.map((t) => <li><a class="tag" href={`/blog/tag/${t}`}>{t}</a></li>)}</ul>
+    <ul class="list">{posts.map((p) => (
+      <li><h2 style="font-size:1.35rem;margin:0"><a href={`/blog/${p.id}`}>{p.data.title}</a></h2>
+        <p class="meta"><time datetime={p.data.date.toISOString().slice(0, 10)}>{fmt(p.data.date)}</time> · {p.data.author}</p>
+        <p>{p.data.summary}</p></li>
+    ))}</ul>
+  </div>
+</Church>

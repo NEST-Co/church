@@ -1,0 +1,88 @@
+---
+import Church from '../layouts/Church.astro';
+---
+<Church title="Search" description="Search sermons, blog posts, events and pages." index={false}>
+  <div class="wrap">
+    <h1>Search the site</h1>
+    <form id="search-form" role="search" class="search-row" action="/search" method="get">
+      <div>
+        <label for="q">Search for</label>
+        <input id="q" name="q" type="search" autocomplete="off" />
+      </div>
+      <div>
+        <label for="section">In</label>
+        <select id="section" name="section">
+          <option value="">Everything</option>
+          <option>Sermons</option>
+          <option>Blog</option>
+          <option>Events</option>
+          <option>Pages</option>
+        </select>
+      </div>
+      <button class="btn" type="submit">Search</button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+    <ul id="results" class="list"></ul>
+    <noscript><p>Search needs JavaScript. You can also browse <a href="/sermons">sermons</a>, <a href="/blog">the blog</a> or <a href="/events">events</a>.</p></noscript>
+  </div>
+</Church>
+<script>
+  const form = document.querySelector<HTMLFormElement>('#search-form')!;
+  const input = document.querySelector<HTMLInputElement>('#q')!;
+  const section = document.querySelector<HTMLSelectElement>('#section')!;
+  const status = document.querySelector<HTMLElement>('#status')!;
+  const list = document.querySelector<HTMLElement>('#results')!;
+  let pf: any;
+
+  async function load() {
+    if (pf) return pf;
+    const url = '/pagefind/pagefind.js';
+    pf = await import(/* @vite-ignore */ url);
+    await pf.options({ baseUrl: '/' });
+    return pf;
+  }
+
+  async function run() {
+    const q = input.value.trim();
+    list.replaceChildren();
+    if (!q) { status.textContent = ''; return; }
+    status.textContent = 'Searching…';
+    try {
+      const engine = await load();
+      const filters = section.value ? { section: section.value } : undefined;
+      const search = await engine.search(q, filters ? { filters } : {});
+      const hits = await Promise.all(search.results.slice(0, 20).map((r: any) => r.data()));
+      status.textContent = hits.length
+        ? `${search.results.length} ${search.results.length === 1 ? 'result' : 'results'} for “${q}”${hits.length < search.results.length ? ' (showing the first 20)' : ''}`
+        : `No results for “${q}”. Try a different word, or browse the sermons and blog.`;
+      for (const h of hits) {
+        const li = document.createElement('li');
+        const h2 = document.createElement('h2');
+        h2.style.cssText = 'font-size:1.25rem;margin:0';
+        const a = document.createElement('a');
+        a.href = h.url;
+        a.textContent = h.meta?.title || h.url;
+        h2.append(a);
+        const p = document.createElement('p');
+        p.innerHTML = h.excerpt; // Pagefind returns the excerpt with <mark> around matches
+        li.append(h2, p);
+        list.append(li);
+      }
+    } catch {
+      status.textContent = 'Search is not available right now. Try browsing the sermons or blog instead.';
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const url = new URL(location.href);
+    url.searchParams.set('q', input.value);
+    section.value ? url.searchParams.set('section', section.value) : url.searchParams.delete('section');
+    history.replaceState(null, '', url);
+    run();
+  });
+  const params = new URLSearchParams(location.search);
+  input.value = params.get('q') ?? '';
+  section.value = params.get('section') ?? '';
+  if (input.value) run();
+</script>

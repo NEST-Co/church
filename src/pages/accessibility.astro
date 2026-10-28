@@ -1,0 +1,42 @@
+---
+import Church from '../layouts/Church.astro';
+---
+<Church title="Accessibility statement" description="How this site was tested for accessibility, with the results." section="Pages">
+  <div class="wrap prose">
+    <h1>Accessibility statement</h1>
+    <p>This site aims to meet WCAG 2.2 level AA. It is a concept project and the church is fictional, but the tests below were run on this site.</p>
+
+    <h2>Test results, October 28, 2026</h2>
+    <table>
+      <caption>Automated and scripted checks</caption>
+      <thead><tr><th scope="col">Check</th><th scope="col">Result</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">axe-core (WCAG 2.0 and 2.1 A and AA, plus best practices)</th><td>0 violations on 15 pages, at phone and desktop sizes, including the search page with results showing</td></tr>
+        <tr><th scope="row">Lighthouse accessibility (13 pages, phone profile)</th><td>100 on every page</td></tr>
+        <tr><th scope="row">Lighthouse performance</th><td>100 on every page; pages weigh about 4 KB</td></tr>
+        <tr><th scope="row">Lighthouse best practices</th><td>100 on every page</td></tr>
+        <tr><th scope="row">Keyboard</th><td>Skip link is the first stop and every stop shows a visible focus ring</td></tr>
+        <tr><th scope="row">Reflow at 320 and 640 pixels wide</th><td>No horizontal scrolling</td></tr>
+        <tr><th scope="row">Text spacing</th><td>No clipped text</td></tr>
+        <tr><th scope="row">Structure</th><td>One h1 per page, no skipped heading levels, every page has a title and description</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Search</h2>
+    <p>Search runs in your browser using Pagefind, with no data sent to a server. The search box and the section menu have labels, the result count is announced to screen readers, and results are a list of links.</p>
+
+    <h2>What was fixed during testing</h2>
+    <ul>
+      <li>Blog topic links ran together with no spaces, which made search results spill off narrow screens. Topics are now a list of separate links.</li>
+      <li>Topic links are now at least 44 pixels tall.</li>
+    </ul>
+
+    <h2>Not yet tested</h2>
+    <ul>
+      <li>Manual screen reader testing (VoiceOver, NVDA), including the search results announcements. This statement will be updated when it is done.</li>
+      <li>Lighthouse "SEO" shows 60, not 100, because the site is deliberately marked <code>noindex</code> so search engines skip this concept project.</li>
+    </ul>
+
+    <p>Tools: axe-core, Lighthouse 12, Pagefind, and Nest Co.'s own scripted checks.</p>
+  </div>
+</Church>

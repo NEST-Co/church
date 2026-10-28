@@ -1,0 +1,20 @@
+---
+import Church from '../layouts/Church.astro';
+import { site, services } from '../data/church';
+---
+<Church title="Plan a visit" section="Pages">
+  <div class="wrap prose">
+    <h1>Plan a visit</h1>
+    <p>We are glad you are thinking about coming. Here is what to expect.</p>
+    <h2>Times</h2>
+    <ul>{services.map((s) => <li><strong>{s.day}, {s.time}:</strong> {s.what}</li>)}</ul>
+    <h2>Where</h2>
+    <p>{site.address}. Free parking is in the lot on Elm Street. The front entrance has no steps, and an accessible restroom is off the main hall.</p>
+    <h2>What to wear</h2>
+    <p>Whatever is comfortable. You will see jeans and you will see ties.</p>
+    <h2>Children</h2>
+    <p>Children are welcome in the service. A nursery and Sunday school are open during the 10:45 a.m. talk.</p>
+    <h2>Questions</h2>
+    <p>Call {site.phone} or email <a href={`mailto:${site.email}`}>{site.email}</a>. We will write back within two working days.</p>
+  </div>
+</Church>

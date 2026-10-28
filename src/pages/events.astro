@@ -1,0 +1,14 @@
+---
+import Church from '../layouts/Church.astro';
+import { events, fmt } from '../data/church';
+---
+<Church title="Events" section="Events">
+  <div class="wrap">
+    <h1>Events</h1>
+    <ul class="list">{events.map((e) => (
+      <li><h2 style="font-size:1.25rem;margin:0">{e.title}</h2>
+        <p class="meta"><time datetime={e.date}>{fmt(e.date, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</time> · {e.time} · {e.place}</p>
+        <p>{e.note}</p></li>
+    ))}</ul>
+  </div>
+</Church>

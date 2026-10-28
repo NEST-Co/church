@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import Church from '../../layouts/Church.astro';
+import { fmt } from '../../data/church';
+const sermons = (await getCollection('sermons')).sort((a, b) => +b.data.date - +a.data.date);
+const series = [...new Set(sermons.map((s) => s.data.series))];
+---
+<Church title="Sermons" section="Sermons">
+  <div class="wrap">
+    <h1>Sermons</h1>
+    <p>Notes and discussion questions from recent Sundays. Audio is not part of this concept site.</p>
+    {series.map((name) => (
+      <section>
+        <h2>{name}</h2>
+        <ul class="list">{sermons.filter((s) => s.data.series === name).map((s) => (
+          <li><h3><a href={`/sermons/${s.id}`}>{s.data.title}</a></h3>
+            <p class="meta"><time datetime={s.data.date.toISOString().slice(0, 10)}>{fmt(s.data.date)}</time> · {s.data.speaker} · {s.data.scripture}</p>
+            <p>{s.data.summary}</p></li>
+        ))}</ul>
+      </section>
+    ))}
+  </div>
+</Church>

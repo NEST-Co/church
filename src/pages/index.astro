@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Church from '../layouts/Church.astro';
+import { site, services, events, fmt, iso } from '../data/church';
+const today = iso(new Date());
+const upcoming = events.filter((e) => e.date >= today).slice(0, 3);
+const shown = upcoming.length ? upcoming : events.slice(0, 3);
+const [sermon] = (await getCollection('sermons')).sort((a, b) => +b.data.date - +a.data.date);
+const posts = (await getCollection('blog')).sort((a, b) => +b.data.date - +a.data.date).slice(0, 3);
+---
+<Church title="Welcome" description="Worship times, sermons, events and news for Cedar Grove Community Church." section="Pages">
+  <div class="hero"><div class="wrap">
+    <h1>You are welcome here</h1>
+    <p>Cedar Grove is a small, friendly church. Come as you are, sit where you like, and stay for coffee.</p>
+    <a class="btn" href="/visit">Plan your visit</a>
+  </div></div>
+  <div class="wrap">
+    <h2>When we meet</h2>
+    <ul class="times">{services.map((s) => <li><strong>{s.day}, {s.time}</strong>{s.what}</li>)}</ul>
+    <div class="two">
+      <section>
+        <h2>Latest sermon</h2>
+        <h3><a href={`/sermons/${sermon.id}`}>{sermon.data.title}</a></h3>
+        <p class="meta">{fmt(sermon.data.date)} · {sermon.data.speaker} · {sermon.data.scripture}</p>
+        <p>{sermon.data.summary}</p>
+        <p><a href="/sermons">All sermons</a></p>
+        <h2>Coming up</h2>
+        <ul class="list">{shown.map((e) => <li><h3>{e.title}</h3><p class="meta"><time datetime={e.date}>{fmt(e.date)}</time> · {e.time} · {e.place}</p></li>)}</ul>
+        <p><a href="/events">All events</a></p>
+      </section>
+      <section>
+        <h2>From the blog</h2>
+        <ul class="list">{posts.map((p) => (
+          <li><h3><a href={`/blog/${p.id}`}>{p.data.title}</a></h3><p class="meta">{fmt(p.data.date)}</p><p>{p.data.summary}</p></li>
+        ))}</ul>
+        <p><a href="/blog">All posts</a> · <a href="/search">Search the site</a></p>
+      </section>
+    </div>
+  </div>
+</Church>
