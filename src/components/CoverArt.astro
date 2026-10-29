@@ -19,8 +19,11 @@ const palettes = [
 let h = 0; for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
 const p = palettes[h % palettes.length];
 const gid = `g${h}`;
+const photos = ['table', 'gate', 'path', 'bread', 'rays', 'lantern', 'leaves', 'book'];
+const photo = photos.includes(m) ? `/img/covers/cover-${m}.jpg` : null;
 ---
-<svg class="cover" style={`aspect-ratio:${ratio}`} viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+{photo && <img class="cover" style={`aspect-ratio:${ratio};object-fit:cover`} src={photo} alt="" width="900" height="385" loading="lazy" />}
+{!photo && <svg class="cover" style={`aspect-ratio:${ratio}`} viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
   <defs>
     <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color={p.a}/><stop offset="1" stop-color={p.b}/></linearGradient>
     <radialGradient id={`${gid}w`} cx=".5" cy=".5" r=".5"><stop offset="0" stop-color={p.x} stop-opacity=".9"/><stop offset="1" stop-color={p.x} stop-opacity="0"/></radialGradient>
@@ -89,7 +92,7 @@ const gid = `g${h}`;
     <g stroke={p.d} stroke-width="3" opacity=".35" stroke-linecap="round"><path d="M92 140q50-10 90 6M92 160q50-10 90 6M92 180q50-10 90 6M218 146q40-16 90-6M218 166q40-16 90-6M218 186q40-16 90-6"/></g>
     <path d="M70 232C110 214 160 212 200 236C240 212 290 214 330 232V246C290 230 240 232 200 252C160 232 110 230 70 246Z" fill={p.d} opacity=".6"/>
   </g>)}
-</svg>
+</svg>}
 <style>
   .cover{display:block;width:100%;height:auto;border-radius:inherit}
 </style>

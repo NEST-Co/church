@@ -19,7 +19,7 @@ const posts = (await getCollection('blog')).sort((a, b) => +b.data.date - +a.dat
         <div class="btns"><a class="btn" href="/visit">Plan your visit</a><a class="btn alt" href={`/sermons/${sermon.id}`}>Hear the latest sermon</a></div>
       </div>
       <div class="arch">
-        <div class="frame"><img src="/img/church-hero.svg" alt="Cedar Grove church at dusk, its windows glowing, with a lit path to the front door" width="640" height="800" fetchpriority="high" /></div>
+        <div class="frame"><img src="/img/church-hero.jpg" alt="Cedar Grove church at dusk, its windows glowing, with a lantern-lit gravel path to the front door" width="800" height="1000" fetchpriority="high" /></div>
         <div class="tag-card"><strong>Sundays, 9:00 and 10:45</strong>{site.address}</div>
       </div>
     </div>
@@ -34,7 +34,7 @@ const posts = (await getCollection('blog')).sort((a, b) => +b.data.date - +a.dat
 
   <section class="newhere" aria-labelledby="new-h">
     <div class="wrap">
-      <img src="/img/potluck.svg" alt="A long table set with shared dishes, candles and neighbors gathered behind it" width="800" height="560" loading="lazy" />
+      <img src="/img/potluck.jpg" alt="Neighbors of all ages passing a casserole across a candlelit potluck table in the fellowship hall" width="1000" height="666" loading="lazy" />
       <div>
         <p class="eyebrow">New here?</p>
         <h2 id="new-h">Nobody is a stranger for long.</h2>
